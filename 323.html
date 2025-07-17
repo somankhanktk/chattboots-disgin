@@ -1,0 +1,749 @@
+NO 1
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Neon 3D Chatbot</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1b;
+      color: #fff;
+    }
+
+    .chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 70px;
+      height: 70px;
+      background: #0ff;
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #0ff, 0 0 30px #0ff, 0 0 45px #0ff;
+      z-index: 999;
+      transition: transform 0.2s ease;
+    }
+
+    .chat-button:hover {
+      transform: scale(1.1);
+      background: #00f0f0;
+    }
+
+    .chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 360px;
+      max-width: 90vw;
+      height: 500px;
+      background: #111122;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #0ff, 0 0 50px #0ff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+      animation: popupFade 0.4s ease-out;
+    }
+
+    @keyframes popupFade {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-header {
+      background: linear-gradient(90deg, #00ffe0, #00bfff);
+      color: #000;
+      padding: 16px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-box {
+      flex-grow: 1;
+      padding: 12px;
+      overflow-y: auto;
+      background: #0d0d1a;
+    }
+
+    .message {
+      margin-bottom: 14px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(0, 255, 255, 0.1);
+      box-shadow: 0 0 10px #0ff55f44;
+    }
+
+    .message strong {
+      display: block;
+      color: #00ffe0;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid #0ff3;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px;
+      background: #1a1a2e;
+      color: #0ff;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .chat-input-area button {
+      padding: 0 24px;
+      background: #00ffff;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-weight: bold;
+    }
+
+    .chat-input-area button:hover {
+      background: #0ff;
+      box-shadow: 0 0 10px #0ff;
+    }
+
+    @media (max-width: 480px) {
+      .chat-popup {
+        width: 95vw;
+        height: 90vh;
+        bottom: 80px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating button -->
+<button class="chat-button" onclick="toggleChat()">💬</button>
+
+<!-- Chat window -->
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-header">⚡ Neon Chatbot</div>
+  <div class="chat-box" id="chatBox"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  const chatPopup = document.getElementById("chatPopup");
+  const chatBox = document.getElementById("chatBox");
+
+  function toggleChat() {
+    chatPopup.style.display = chatPopup.style.display === "flex" ? "none" : "flex";
+  }
+
+  function appendMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.classList.add("message");
+    msg.innerHTML = `<strong>${sender}</strong>${text}`;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById("chatInput");
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage("You", message);
+    input.value = "";
+
+    try {
+      const response = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      appendMessage("Bot", data.response);
+    } catch (error) {
+      appendMessage("Bot", "⚠️ Server not responding.");
+    }
+  }
+</script>
+</body>
+</html>
+
+-----------------------------------------------------------------------------------------------------------------------
+
+NO 2
+
+
+
+<!-- SECOND CHAT BUTTON -->
+<button class="chat-button galaxy" onclick="toggleChat2()">✨</button>
+
+<!-- SECOND CHAT POPUP -->
+<div class="chat-popup" id="chatPopup2" style="border-color: #ff00ff;">
+  <div class="chat-header" style="background: linear-gradient(90deg, #ff00ff, #aa00ff); color: #fff;">
+    🌌 Galaxy Bot
+  </div>
+  <div class="chat-box" id="chatBox2"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput2" placeholder="Type your message...">
+    <button style="background: #ff00ff;" onclick="sendMessage2()">Send</button>
+  </div>
+</div>
+
+<style>
+  .chat-button.galaxy {
+    right: 100px;
+    background: #ff00ff;
+    box-shadow: 0 0 15px #ff00ff, 0 0 30px #aa00ff, 0 0 45px #aa00ff;
+  }
+
+  .chat-button.galaxy:hover {
+    background: #e000e0;
+  }
+
+  #chatPopup2 {
+    background: #1a0d1f;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 20px #ff00ff, 0 0 50px #aa00ff;
+  }
+
+  #chatPopup2 .chat-box {
+    background: #150015;
+  }
+
+  #chatPopup2 .message {
+    background: rgba(255, 0, 255, 0.1);
+    box-shadow: 0 0 10px #ff00ff55;
+  }
+
+  #chatPopup2 .message strong {
+    color: #ff66ff;
+  }
+
+  #chatPopup2 .chat-input-area input {
+    background: #2a002a;
+    color: #ffccff;
+  }
+</style>
+
+<script>
+  function toggleChat2() {
+    const popup = document.getElementById("chatPopup2");
+    popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+  }
+
+  function appendMessage2(sender, text) {
+    const msg = document.createElement("div");
+    msg.classList.add("message");
+    msg.innerHTML = `<strong>${sender}</strong>${text}`;
+    document.getElementById("chatBox2").appendChild(msg);
+    document.getElementById("chatBox2").scrollTop = chatBox2.scrollHeight;
+  }
+
+  async function sendMessage2() {
+    const input = document.getElementById("chatInput2");
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage2("You", message);
+    input.value = "";
+
+    try {
+      const response = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      appendMessage2("Galaxy Bot", data.response);
+    } catch (error) {
+      appendMessage2("Galaxy Bot", "⚠️ Server not responding.");
+    }
+  }
+</script>
+
+------------------------------------------------------------------------------------------------------------------------
+NO 3
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual Neon Chatbots</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1b;
+      color: #fff;
+    }
+
+    .chat-button, .chat-button2 {
+      position: fixed;
+      width: 70px;
+      height: 70px;
+      font-size: 28px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      transition: transform 0.2s ease;
+    }
+
+    .chat-button {
+      bottom: 20px;
+      right: 20px;
+      background: #0ff;
+      color: #000;
+      box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
+    }
+
+    .chat-button2 {
+      bottom: 20px;
+      left: 20px;
+      background: #ff00cc;
+      color: #000;
+      box-shadow: 0 0 15px #ff00cc, 0 0 30px #ff00cc;
+    }
+
+    .chat-button:hover, .chat-button2:hover {
+      transform: scale(1.1);
+    }
+
+    .chat-popup, .chat-popup2 {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      width: 360px;
+      max-width: 90vw;
+      height: 500px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+      animation: popupFade 0.4s ease-out;
+    }
+
+    .chat-popup {
+      right: 20px;
+      background: #111122;
+      box-shadow: 0 0 20px #0ff, 0 0 50px #0ff;
+    }
+
+    .chat-popup2 {
+      left: 20px;
+      background: #1a0f1f;
+      box-shadow: 0 0 20px #ff00cc, 0 0 50px #ff00cc;
+    }
+
+    @keyframes popupFade {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-header, .chat-header2 {
+      padding: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .chat-header {
+      background: linear-gradient(90deg, #00ffe0, #00bfff);
+      color: #000;
+    }
+
+    .chat-header2 {
+      background: linear-gradient(90deg, #ff00cc, #ff66ff);
+      color: #000;
+    }
+
+    .chat-box, .chat-box2 {
+      flex-grow: 1;
+      padding: 12px;
+      overflow-y: auto;
+    }
+
+    .chat-box {
+      background: #0d0d1a;
+    }
+
+    .chat-box2 {
+      background: #170b17;
+    }
+
+    .message {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 10px #ffffff22;
+    }
+
+    .message strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #00ffe0;
+    }
+
+    .chat-popup2 .message strong {
+      color: #ff66ff;
+    }
+
+    .chat-input-area, .chat-input-area2 {
+      display: flex;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-input-area input, .chat-input-area2 input {
+      flex: 1;
+      padding: 12px;
+      background: #1a1a2e;
+      color: #0ff;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .chat-popup2 .chat-input-area2 input {
+      background: #2a0f2e;
+      color: #ff66ff;
+    }
+
+    .chat-input-area button, .chat-input-area2 button {
+      padding: 0 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    .chat-input-area button {
+      background: #00ffff;
+      color: #000;
+    }
+
+    .chat-input-area2 button {
+      background: #ff00cc;
+      color: #000;
+    }
+
+    @media (max-width: 480px) {
+      .chat-popup, .chat-popup2 {
+        width: 95vw;
+        height: 90vh;
+        bottom: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Buttons -->
+<button class="chat-button" onclick="toggleChat('chatPopup')">💬</button>
+<button class="chat-button2" onclick="toggleChat('chatPopup2')">🤖</button>
+
+<!-- Neon Bot 1 (cyan) -->
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-header">💠 Neon Chatbot</div>
+  <div class="chat-box" id="chatBox"></div>
+  <div class="chat-input-area">
+    <input type="text" id="chatInput" placeholder="Type your message...">
+    <button onclick="sendMessage('chatInput', 'chatBox', '/chat')">Send</button>
+  </div>
+</div>
+
+<!-- Neon Bot 2 (pink) -->
+<div class="chat-popup2" id="chatPopup2">
+  <div class="chat-header2">💗 Pink Chatbot</div>
+  <div class="chat-box2" id="chatBox2"></div>
+  <div class="chat-input-area2">
+    <input type="text" id="chatInput2" placeholder="Type your message...">
+    <button onclick="sendMessage('chatInput2', 'chatBox2', '/chat2')">Send</button>
+  </div>
+</div>
+
+<script>
+  function toggleChat(id) {
+    const popup = document.getElementById(id);
+    popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+  }
+
+  function appendMessage(boxId, sender, text) {
+    const chatBox = document.getElementById(boxId);
+    const msg = document.createElement("div");
+    msg.classList.add("message");
+    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function sendMessage(inputId, boxId, endpoint) {
+    const input = document.getElementById(inputId);
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage(boxId, "You", message);
+    input.value = "";
+
+    try {
+      const response = await fetch(`http://localhost:5000${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      appendMessage(boxId, "Bot", data.response);
+    } catch (err) {
+      appendMessage(boxId, "Bot", "⚠️ Server not responding.");
+    }
+  }
+</script>
+
+</body>
+</html>
+
+-----------------------------------------------------------------------------------------------------------------------
+NO 4
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All-in-One Neon Chatbots</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1b;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Shared Styles */
+    .chat-button {
+      position: fixed;
+      bottom: 20px;
+      width: 70px;
+      height: 70px;
+      font-size: 28px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      transition: transform 0.2s ease;
+    }
+    .chat-button:hover { transform: scale(1.1); }
+
+    .chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      width: 350px;
+      max-width: 90vw;
+      height: 500px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .chat-header {
+      padding: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .chat-box {
+      flex-grow: 1;
+      padding: 12px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    .message {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 10px #ffffff22;
+    }
+
+    .message strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+    }
+
+    .chat-input-area button {
+      padding: 0 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Neon Blue Bot */
+    .neon-btn { right: 20px; background: #0ff; color: #000; box-shadow: 0 0 15px #0ff, 0 0 30px #0ff; }
+    .neon-popup { right: 20px; background: #111122; box-shadow: 0 0 20px #0ff, 0 0 40px #0ff; }
+    .neon-header { background: linear-gradient(90deg, #00ffe0, #00bfff); color: #000; }
+    .neon-box { background: #0d0d1a; }
+    .neon-input { background: #1a1a2e; color: #0ff; }
+    .neon-send { background: #0ff; color: #000; }
+    .neon-msg strong { color: #0ff; }
+
+    /* Galaxy Pink Bot */
+    .pink-btn { right: 100px; background: #ff00cc; color: #000; box-shadow: 0 0 15px #ff00cc, 0 0 30px #ff00cc; }
+    .pink-popup { right: 100px; background: #1a0f1f; box-shadow: 0 0 20px #ff00cc, 0 0 40px #ff33cc; }
+    .pink-header { background: linear-gradient(90deg, #ff00cc, #ff66ff); color: #000; }
+    .pink-box { background: #170b17; }
+    .pink-input { background: #2a0f2e; color: #ff66ff; }
+    .pink-send { background: #ff00cc; color: #000; }
+    .pink-msg strong { color: #ff66ff; }
+
+    /* TechBot Green */
+    .green-btn { right: 180px; background: #00ff88; color: #000; box-shadow: 0 0 15px #00ff88, 0 0 30px #00cc66; }
+    .green-popup { right: 180px; background: #0a0f0a; border: 2px solid #00ff88; box-shadow: 0 0 20px #00ff88, 0 0 40px #00cc66; }
+    .green-header { background: linear-gradient(90deg, #00ff88, #00cc66); color: #000; }
+    .green-box { background: #000; }
+    .green-input { background: #001100; color: #00ff88; font-family: monospace; }
+    .green-send { background: #00ff88; color: #000; }
+    .green-msg strong { color: #00ff88; }
+
+    @media (max-width: 480px) {
+      .chat-popup { width: 95vw; height: 90vh; bottom: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Neon Blue Bot -->
+<button class="chat-button neon-btn" onclick="toggleChat('chatPopup1')">💬</button>
+<div class="chat-popup neon-popup" id="chatPopup1">
+  <div class="chat-header neon-header">💬 Neon Bot</div>
+  <div class="chat-box neon-box" id="chatBox1"></div>
+  <div class="chat-input-area">
+    <input type="text" class="neon-input" id="chatInput1" placeholder="Type a message...">
+    <button class="neon-send" onclick="sendMessage('chatInput1', 'chatBox1', '/chat')">Send</button>
+  </div>
+</div>
+
+<!-- Galaxy Pink Bot -->
+<button class="chat-button pink-btn" onclick="toggleChat('chatPopup2')">✨</button>
+<div class="chat-popup pink-popup" id="chatPopup2">
+  <div class="chat-header pink-header">✨ Galaxy Bot</div>
+  <div class="chat-box pink-box" id="chatBox2"></div>
+  <div class="chat-input-area">
+    <input type="text" class="pink-input" id="chatInput2" placeholder="Ask the galaxy...">
+    <button class="pink-send" onclick="sendMessage('chatInput2', 'chatBox2', '/chat2')">Send</button>
+  </div>
+</div>
+
+<!-- Tech Green Bot -->
+<button class="chat-button green-btn" onclick="toggleChat('chatPopup3')">🧠</button>
+<div class="chat-popup green-popup" id="chatPopup3">
+  <div class="chat-header green-header">🧠 TechBot</div>
+  <div class="chat-box green-box" id="chatBox3"></div>
+  <div class="chat-input-area">
+    <input type="text" class="green-input" id="chatInput3" placeholder="Enter a command...">
+    <button class="green-send" onclick="sendMessage('chatInput3', 'chatBox3', '/chat3')">Send</button>
+  </div>
+</div>
+
+<script>
+  function toggleChat(id) {
+    const popup = document.getElementById(id);
+    popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+  }
+
+  function appendMessage(boxId, sender, text, colorClass) {
+    const box = document.getElementById(boxId);
+    const msg = document.createElement("div");
+    msg.className = `message ${colorClass}`;
+    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    box.appendChild(msg);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  async function sendMessage(inputId, boxId, endpoint) {
+    const input = document.getElementById(inputId);
+    const message = input.value.trim();
+    if (!message) return;
+
+    const colorClass = boxId.includes("1") ? "neon-msg" :
+                       boxId.includes("2") ? "pink-msg" : "green-msg";
+
+    appendMessage(boxId, "You", message, colorClass);
+    input.value = "";
+
+    try {
+      const res = await fetch(`http://localhost:5000${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+      const data = await res.json();
+      appendMessage(boxId, "Bot", data.response, colorClass);
+    } catch {
+      appendMessage(boxId, "Bot", "⚠️ Server error", colorClass);
+    }
+  }
+</script>
+
+</body>
+</html>
+ ------------------------------------------------------------------------------------------------------------------------
+
+NO 4
